@@ -1,0 +1,25 @@
+# Build output
+build/
+build-*/
+cmake-build-*/
+out/
+
+# IDE / editor
+.idea/
+.vs/
+.vscode/
+*.swp
+
+# Compiled artifacts
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Benchmark data downloaded at runtime
+bench/data/*.txt
+!bench/data/README.md
