@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(sudoku_tests
     test_grid.cpp
     test_backtracking_solver.cpp
+    test_fast_solver.cpp
 )
 target_link_libraries(sudoku_tests PRIVATE sudoku::sudoku sudoku_warnings GTest::gtest_main)
 

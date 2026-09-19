@@ -6,11 +6,14 @@ std::unique_ptr<Solver> make_solver(std::string_view name) {
     if (name == "backtracking") {
         return std::make_unique<BacktrackingSolver>();
     }
+    if (name == "fast") {
+        return std::make_unique<FastSolver>();
+    }
     return nullptr;
 }
 
 std::vector<std::string_view> solver_names() {
-    return {"backtracking"};
+    return {"backtracking", "fast"};
 }
 
 }  // namespace sudoku

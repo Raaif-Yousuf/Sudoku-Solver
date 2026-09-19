@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <string_view>
@@ -34,6 +35,20 @@ public:
     [[nodiscard]] std::string_view name() const override { return "backtracking"; }
     bool solve(Grid& grid, SolveStats* stats = nullptr) override;
 };
+
+/// A solver built on per-row/column/box candidate bitmasks. Propagates naked
+/// and hidden singles to a fixed point, then searches depth-first, branching
+/// on the empty cell with the fewest remaining candidates (MRV).
+class FastSolver final : public Solver {
+public:
+    [[nodiscard]] std::string_view name() const override { return "fast"; }
+    bool solve(Grid& grid, SolveStats* stats = nullptr) override;
+};
+
+/// Counts distinct solutions of `puzzle` using the same bitmask engine as
+/// FastSolver, stopping once `limit` solutions have been found. Returns 0 if
+/// the puzzle is inconsistent.
+[[nodiscard]] std::size_t count_solutions(const Grid& puzzle, std::size_t limit = 2);
 
 /// Creates a solver by name, or returns nullptr for an unknown name.
 [[nodiscard]] std::unique_ptr<Solver> make_solver(std::string_view name);

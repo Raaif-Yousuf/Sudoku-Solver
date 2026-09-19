@@ -36,6 +36,7 @@ endif()
 add_library(sudoku
     src/grid.cpp
     src/backtracking_solver.cpp
+    src/fast_solver.cpp
     src/solver_factory.cpp
 )
 add_library(sudoku::sudoku ALIAS sudoku)
