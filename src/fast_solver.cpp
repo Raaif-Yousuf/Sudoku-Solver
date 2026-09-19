@@ -2,6 +2,7 @@
 
 #include <array>
 #include <optional>
+#include <utility>
 
 namespace sudoku {
 
