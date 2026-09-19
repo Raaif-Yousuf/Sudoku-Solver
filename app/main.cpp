@@ -23,6 +23,7 @@ struct Options {
     std::string solver = "backtracking";
     Format format = Format::kAuto;
     bool stats = false;
+    bool unique = false;
     bool interactive = false;
     std::string path;  // empty or "-" means stdin
 };
@@ -43,6 +44,7 @@ void print_usage(std::ostream& os) {
           "  -f, --format FMT    output format: pretty or line (default: pretty for one\n"
           "                      puzzle, line for several)\n"
           "      --stats         print search nodes and solve time to stderr\n"
+          "      --unique        print to stderr whether each puzzle has a unique solution\n"
           "  -i, --interactive   prompt for the puzzle row by row\n"
           "  -h, --help          show this message\n"
           "\n"
@@ -85,6 +87,8 @@ bool parse_args(int argc, char** argv, Options& options) {
             }
         } else if (arg == "--stats") {
             options.stats = true;
+        } else if (arg == "--unique") {
+            options.unique = true;
         } else if (arg == "-i" || arg == "--interactive") {
             options.interactive = true;
         } else if (arg.size() > 1 && arg[0] == '-') {
@@ -201,6 +205,12 @@ int main(int argc, char** argv) {
                 std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
             std::cerr << "puzzle " << i + 1 << ": solver=" << solver->name()
                       << " nodes=" << stats.nodes << " time_us=" << micros << '\n';
+        }
+        if (options.unique) {
+            const bool has_unique_solution = sudoku::count_solutions(puzzles[i], 2) == 1;
+            std::cerr << "puzzle " << i + 1 << ": "
+                      << (has_unique_solution ? "unique solution" : "not a unique solution")
+                      << '\n';
         }
     }
     return exit_code;
