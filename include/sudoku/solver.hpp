@@ -17,7 +17,7 @@ struct SolveStats {
 
 /// Common interface for every solving strategy.
 class Solver {
-public:
+  public:
     virtual ~Solver() = default;
 
     /// Short identifier used by the CLI and benchmarks (e.g. "backtracking").
@@ -31,7 +31,7 @@ public:
 /// The original recursive backtracking solver: fills cells in row-major order,
 /// trying digits 1-9 and checking row, column, and box each time.
 class BacktrackingSolver final : public Solver {
-public:
+  public:
     [[nodiscard]] std::string_view name() const override { return "backtracking"; }
     bool solve(Grid& grid, SolveStats* stats = nullptr) override;
 };
@@ -40,7 +40,7 @@ public:
 /// and hidden singles to a fixed point, then searches depth-first, branching
 /// on the empty cell with the fewest remaining candidates (MRV).
 class FastSolver final : public Solver {
-public:
+  public:
     [[nodiscard]] std::string_view name() const override { return "fast"; }
     bool solve(Grid& grid, SolveStats* stats = nullptr) override;
 };
