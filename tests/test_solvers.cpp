@@ -26,7 +26,8 @@ constexpr const char* kEasyPuzzle =
 constexpr const char* kInkalaHardPuzzle =
     "8..........36......7..9.2...5...7.......457.....1...3...1....68..85...1..9....4..";
 
-// Two of Peter Norvig's "hardest" example puzzles (norvig.com/sudoku.html).
+// Two puzzles from Peter Norvig's essay (norvig.com/sudoku.html). The second is
+// his "hard1": it has many solutions and is a pathological case for search.
 constexpr const char* kNorvigHardPuzzle1 =
     "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......";
 constexpr const char* kNorvigHardPuzzle2 =
