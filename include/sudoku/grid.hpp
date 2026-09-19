@@ -12,7 +12,7 @@ namespace sudoku {
 
 /// A 9x9 Sudoku board. Empty cells hold 0, filled cells hold 1-9.
 class Grid {
-public:
+  public:
     static constexpr int kSize = 9;
     static constexpr int kBox = 3;
     static constexpr int kCells = kSize * kSize;
@@ -20,10 +20,14 @@ public:
     Grid() = default;
 
     [[nodiscard]] int at(int row, int col) const { return cells_[index(row, col)]; }
-    void set(int row, int col, int value) { cells_[index(row, col)] = static_cast<std::uint8_t>(value); }
+    void set(int row, int col, int value) {
+        cells_[index(row, col)] = static_cast<std::uint8_t>(value);
+    }
 
     [[nodiscard]] int at(int cell) const { return cells_[static_cast<std::size_t>(cell)]; }
-    void set(int cell, int value) { cells_[static_cast<std::size_t>(cell)] = static_cast<std::uint8_t>(value); }
+    void set(int cell, int value) {
+        cells_[static_cast<std::size_t>(cell)] = static_cast<std::uint8_t>(value);
+    }
 
     /// Number of non-empty cells.
     [[nodiscard]] int filled_count() const;
@@ -46,7 +50,7 @@ public:
     friend bool operator==(const Grid& a, const Grid& b) { return a.cells_ == b.cells_; }
     friend bool operator!=(const Grid& a, const Grid& b) { return !(a == b); }
 
-private:
+  private:
     static constexpr std::size_t index(int row, int col) {
         return static_cast<std::size_t>(row * kSize + col);
     }

@@ -1,8 +1,8 @@
-#include "sudoku/solver.hpp"
-
 #include <array>
 #include <optional>
 #include <utility>
+
+#include "sudoku/solver.hpp"
 
 namespace sudoku {
 
@@ -83,8 +83,8 @@ struct FastState {
 
     [[nodiscard]] Mask candidates(int row, int col) const {
         const Mask used = row_used[static_cast<std::size_t>(row)] |
-                           col_used[static_cast<std::size_t>(col)] |
-                           box_used[static_cast<std::size_t>(box_of(row, col))];
+                          col_used[static_cast<std::size_t>(col)] |
+                          box_used[static_cast<std::size_t>(box_of(row, col))];
         return static_cast<Mask>(~used & kFullMask);
     }
 
@@ -111,8 +111,8 @@ struct FastState {
             }
             const Mask bit = static_cast<Mask>(1u << (value - 1));
             const Mask used = state.row_used[static_cast<std::size_t>(row)] |
-                               state.col_used[static_cast<std::size_t>(col)] |
-                               state.box_used[static_cast<std::size_t>(box_of(row, col))];
+                              state.col_used[static_cast<std::size_t>(col)] |
+                              state.box_used[static_cast<std::size_t>(box_of(row, col))];
             if ((used & bit) != 0) {
                 return std::nullopt;
             }
@@ -204,7 +204,7 @@ struct FastState {
 // Finds the empty cell with the fewest remaining candidates. Returns false
 // (leaving the outputs untouched) if there is no empty cell.
 [[nodiscard]] bool find_mrv_cell(const FastState& state, int& out_row, int& out_col,
-                                  Mask& out_cands) {
+                                 Mask& out_cands) {
     int best_count = Grid::kSize + 1;
     for (int row = 0; row < Grid::kSize; ++row) {
         for (int col = 0; col < Grid::kSize; ++col) {
