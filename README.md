@@ -39,6 +39,9 @@ cmake --build build --config Release
 ctest --test-dir build -C Release
 ```
 
+If you only want to run it, the [v1.0.0 release](https://github.com/Raaif-Yousuf/Sudoku-Solver/releases/tag/v1.0.0)
+has a standalone Windows x64 binary with no runtime dependencies.
+
 Needs CMake 3.16+ and a C++17 compiler. Puzzles can be 81-character lines (`.` or `0` for blanks) or 9 rows of digits. To rerun the benchmark, `python scripts/download_puzzles.py` then `./build/bench/sudoku_bench bench/data/*.txt`.
 
 The 79 GoogleTest tests run on Linux, Windows and macOS for every pull request, plus a sanitizer build.
