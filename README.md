@@ -2,23 +2,9 @@
 
 [![CI](https://github.com/Raaif-Yousuf/Sudoku-Solver/actions/workflows/ci.yml/badge.svg)](https://github.com/Raaif-Yousuf/Sudoku-Solver/actions/workflows/ci.yml)
 
-A C++17 Sudoku solver. I started with a plain backtracking solver, then wrote a second one using bitmasks and constraint propagation to see how much faster it could get. On Norvig's 95 hard puzzles it went from 36.9 s to 78 ms.
+A C++17 Sudoku solver. I started with a plain backtracking solver, then wrote a second one using bitmasks and constraint propagation to see how much faster it could get. On Norvig's 95 hard puzzles it went from 30.1 s to 52 ms.
 
-```text
-$ echo "8..........36......7..9.2...5...7.......457.....1...3...1....68..85...1..9....4.." | sudoku --solver fast --stats
-8 1 2 | 7 5 3 | 6 4 9
-9 4 3 | 6 8 2 | 1 7 5
-6 7 5 | 4 9 1 | 2 8 3
-------+-------+------
-1 5 4 | 2 3 7 | 8 9 6
-3 6 9 | 8 4 5 | 7 2 1
-2 8 7 | 1 6 9 | 5 3 4
-------+-------+------
-5 2 1 | 9 7 4 | 3 6 8
-4 3 8 | 5 2 6 | 9 1 7
-7 9 6 | 3 1 8 | 4 5 2
-puzzle 1: solver=fast nodes=172 time_us=1724
-```
+![Sudoku solver CLI running on a hard puzzle, fast solver vs backtracking](docs/screenshots/cli-hard-puzzle.png)
 
 ## How it works
 
@@ -32,15 +18,17 @@ The backtracking solver fills cells left to right, tries 1 to 9, and backs up on
 
 ## Results
 
-Mean of 3 runs on my laptop (Core Ultra 7 255H, GCC -O3). Puzzle sets are from [Norvig's essay](https://norvig.com/sudoku.html).
+Mean of 3 runs on my laptop (Core Ultra 7 255H, GCC 16.1.0, -O3). Puzzle sets are from [Norvig's essay](https://norvig.com/sudoku.html). Raw output in `docs/benchmark-2026-09.txt`.
 
 | Puzzle set | Backtracking | Fast | Placements tried (avg) |
 |---|---|---|---|
-| easy50 | 190 ms | 3 ms | 24,493 → 0.6 |
-| top95 | 36.9 s | 78 ms | 4,138,390 → 64.5 |
-| hardest | 173 ms | 2 ms | 95,454 → 9 |
+| easy50 | 118 ms | 1.8 ms | 24,493 → 0.6 |
+| top95 | 30.1 s | 52 ms | 4,138,390 → 64.5 |
+| hardest | 106 ms | 1.4 ms | 95,454 → 9 |
 
-It isn't always faster. Norvig's `hard1` has many solutions, so propagation rarely prunes anything, and the fast solver takes 4.1 s where backtracking takes 29 ms.
+Wall-clock totals swing by 1.5-2x between back to back runs on this laptop (turbo and background load), so treat these as ballpark; the node counts above are exact and identical every run.
+
+It isn't always faster. Norvig's `hard1` has many solutions, so propagation rarely prunes anything: over three runs the fast solver averaged 1.6 s on it where backtracking averaged 30 ms.
 
 ## Build
 

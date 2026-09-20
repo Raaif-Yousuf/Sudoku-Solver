@@ -1,0 +1,92 @@
+Benchmark run: 2026-09-20
+
+Machine
+  CPU: Intel(R) Core(TM) Ultra 7 255H
+  OS: Windows 11 Home (10.0.26200)
+  Compiler: g++ (Rev5, Built by MSYS2 project) 16.1.0
+  Flags: -O3 -DNDEBUG (CMAKE_BUILD_TYPE=Release)
+  CMake: 4.4.3, generator "MinGW Makefiles"
+
+Puzzle sets: downloaded via scripts/download_puzzles.py (Norvig's easy50,
+top95, hardest sets, hash-verified against norvig.com).
+
+Command: build/bench/sudoku_bench bench/data/easy50.txt bench/data/top95.txt bench/data/hardest.txt
+Mean of 3 separate invocations (each invocation solves every puzzle once per solver).
+
+=== RUN 1 ===
+Build: GCC 16.1.0, NDEBUG defined
+
+| Dataset | Puzzles | Solver | Total ms | Mean us/puzzle | Median us | Max us | Mean nodes |
+|---|---|---|---|---|---|---|---|
+| easy50 | 50 | backtracking | 91.59 | 1831.84 | 374.80 | 13385.50 | 24493.2 |
+| easy50 | 50 | fast | 1.41 | 28.22 | 23.30 | 69.30 | 0.6 |
+| top95 | 95 | backtracking | 21756.95 | 229020.52 | 14755.00 | 6618506.00 | 4138389.9 |
+| top95 | 95 | fast | 64.99 | 684.07 | 375.30 | 3552.90 | 64.5 |
+| hardest | 11 | backtracking | 143.05 | 13004.85 | 8879.90 | 41614.80 | 95454.2 |
+| hardest | 11 | fast | 1.59 | 144.86 | 87.40 | 292.10 | 9.0 |
+
+=== RUN 2 ===
+Build: GCC 16.1.0, NDEBUG defined
+
+| Dataset | Puzzles | Solver | Total ms | Mean us/puzzle | Median us | Max us | Mean nodes |
+|---|---|---|---|---|---|---|---|
+| easy50 | 50 | backtracking | 135.62 | 2712.47 | 536.70 | 20725.70 | 24493.2 |
+| easy50 | 50 | fast | 2.12 | 42.40 | 33.75 | 140.80 | 0.6 |
+| top95 | 95 | backtracking | 39226.51 | 412910.65 | 18408.80 | 14035764.40 | 4138389.9 |
+| top95 | 95 | fast | 59.69 | 628.32 | 375.50 | 3718.70 | 64.5 |
+| hardest | 11 | backtracking | 123.78 | 11252.64 | 4537.70 | 31777.00 | 95454.2 |
+| hardest | 11 | fast | 1.64 | 148.92 | 91.10 | 286.30 | 9.0 |
+
+=== RUN 3 ===
+Build: GCC 16.1.0, NDEBUG defined
+
+| Dataset | Puzzles | Solver | Total ms | Mean us/puzzle | Median us | Max us | Mean nodes |
+|---|---|---|---|---|---|---|---|
+| easy50 | 50 | backtracking | 125.67 | 2513.44 | 531.20 | 19833.70 | 24493.2 |
+| easy50 | 50 | fast | 1.77 | 35.32 | 28.75 | 89.00 | 0.6 |
+| top95 | 95 | backtracking | 29353.68 | 308986.15 | 17040.80 | 10413087.00 | 4138389.9 |
+| top95 | 95 | fast | 30.76 | 323.84 | 205.20 | 1555.30 | 64.5 |
+| hardest | 11 | backtracking | 50.23 | 4566.26 | 2471.50 | 15366.50 | 95454.2 |
+| hardest | 11 | fast | 0.86 | 77.95 | 43.60 | 155.70 | 9.0 |
+
+=== MEAN OF 3 RUNS (Total ms per dataset/solver) ===
+
+| Puzzle set | Backtracking | Fast | Placements tried (avg) |
+|---|---|---|---|
+| easy50 | 117.6 ms | 1.77 ms | 24,493.2 -> 0.6 |
+| top95 | 30.11 s | 51.8 ms | 4,138,389.9 -> 64.5 |
+| hardest | 105.7 ms | 1.36 ms | 95,454.2 -> 9.0 |
+
+top95 speedup: 30112 ms / 51.8 ms = ~581x (README previously claimed 36.9 s -> 78 ms, ~473x;
+the ballpark holds, the exact figures on this machine today are different -- see note on
+run-to-run variance below).
+
+=== hard1 (Norvig's pathological many-solutions case) ===
+
+Puzzle: .....6....59.....82....8....45........3........6..3.54...325..6..................
+Command: sudoku --solver {fast,backtracking} --stats < hard1.txt
+
+Three consecutive runs (time_us from the --stats output; node counts are
+deterministic, 658725 for fast and 419194 for backtracking):
+
+  fast:         1760262 us, 1491362 us, 1652439 us  -> mean 1634688 us (1.63 s)
+  backtracking:   27454 us,   29533 us,   34055 us  -> mean 30347 us (30.3 ms)
+
+README previously claimed fast=4.1s, backtracking=29ms for this case. Backtracking's
+29ms matches closely; the fast solver's absolute time is lower than claimed on this
+machine/build (~1.6s vs 4.1s), but the qualitative result holds: on hard1 the
+backtracking solver beats the fast solver, by roughly 50x.
+
+=== Notes on variance ===
+
+Wall-clock totals on this laptop vary noticeably between runs (visible above,
+e.g. top95 backtracking total ranges from 21.8s to 39.2s across three back to
+back invocations), most likely from CPU turbo/thermal state and background
+processes rather than the solvers themselves -- the node counts (the actual
+algorithmic work) are identical every run. The speedup ratios are more stable
+than the absolute numbers.
+
+=== ctest ===
+
+ctest --test-dir build -C Release
+100% tests passed, 79/79, total test time 20.85 sec
